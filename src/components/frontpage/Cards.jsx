@@ -64,10 +64,10 @@ const Cards = () => {
                </Text>
             </CardContent>
             <CardActions>
-                  <Stylebutton variant="contained" onClick={() => openDialog()}>Login</Stylebutton>
+                  <Stylebutton variant="contained" onClick={() => {openDialog(); setFlag(1)}}>Login</Stylebutton>
             </CardActions>
             </CardComponent>
-            <UserLogin open={open} setOpen={setOpen} />
+            <UserLogin open={open} setOpen={setOpen} flag={flag} />
          </Grid>
              
 
@@ -94,11 +94,11 @@ const Cards = () => {
           </Text>
         </CardContent>
         <CardActions>
-          <Stylebutton variant="contained" onClick={()=> openDialog()}>Login</Stylebutton>
+          <Stylebutton variant="contained" onClick={()=> {openDialog(); setFlag(2)}}>Login</Stylebutton>
         </CardActions>
       </CardComponent>
 
-      <UserLogin open={open} setOpen={setOpen}/>
+      <UserLogin open={open} setOpen={setOpen} flag={flag}/>
       
     </Grid>
 
@@ -125,10 +125,10 @@ const Cards = () => {
           </Text>
         </CardContent>
         <CardActions>
-          <Stylebutton variant="contained" onClick={() => openDialog()}>Login</Stylebutton>
+          <Stylebutton variant="contained" onClick={() => {openDialog(); setFlag(3)}}>Login</Stylebutton>
         </CardActions>
       </CardComponent>
-      <UserLogin open={open} setOpen={setOpen}/>
+      <UserLogin open={open} setOpen={setOpen} flag={flag}/>
     </Grid>
 
       {/* fourth card */}
@@ -154,10 +154,10 @@ const Cards = () => {
           </Text>
         </CardContent>
         <CardActions>
-          <Stylebutton variant="contained" onClick={() => openDialog()}>Login</Stylebutton>
+          <Stylebutton variant="contained" onClick={() => {openDialog(); setFlag(4)}}>Login</Stylebutton>
         </CardActions>
       </CardComponent>
-      <UserLogin open={open} setOpen={setOpen}/>
+      <UserLogin open={open} setOpen={setOpen} flag={flag}/>
      </Grid>
     </Grid>
     </Box>

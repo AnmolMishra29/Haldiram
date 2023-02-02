@@ -1,8 +1,9 @@
 import { Box,TextField, Button,styled,Dialog, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Component =styled(Box)`
      height:65vh;
-     width:80vw;
+     width:65vw;
      margin:auto;
 `
 const Container = styled(Box)`
@@ -44,20 +45,17 @@ const UserLogin = ({open, setOpen,flag})=> {
             <Dialog open={open} onClose={handleClose} flag={flag}>
                <Component>
                     <Container>
-                    {
-                         flag === "1" ?
-                             <HeadingText>
-                                  Marketing Private Limited
-                             </HeadingText>
-                             :
-                             <HeadingText>
-                                  Ethnic Private Limited
-                             </HeadingText>
-                    }    
-                                  
+                       {    
+                         flag === 1 ? <HeadingText>Ethnic Foods Private Limited</HeadingText> : flag === 2 ? <HeadingText>Marketing Private Limited</HeadingText> : flag === 3 ? <HeadingText>Manufacturing Private Limited</HeadingText> : <HeadingText>Product Private Limited</HeadingText>
+                       }
                          <Text variant="filled" name='email' label="Email"/>
                          <Text variant="filled" name='password' label="Password"/>
-                         <Stylebutton variant="contained">Login</Stylebutton>
+                         {
+                            flag === 1 ? <Link to="/ethnic"> <Stylebutton variant="contained">Login</Stylebutton> </Link> : 
+                            flag === 2 ? <Link to="/manufacturing"> <Stylebutton variant="contained">Login</Stylebutton> </Link> :
+                            flag === 3 ? <Link to="/marketing"> <Stylebutton variant="contained">Login</Stylebutton> </Link> :
+                            flag === 4 ? <Link to="/product"> <Stylebutton variant="contained">Login</Stylebutton> </Link> : null
+                         }
                     </Container>
 
                </Component> 

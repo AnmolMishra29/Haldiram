@@ -42,7 +42,6 @@ const Appbar = ()=> {
             <Text variant="h6" component="div" sx={{ flexGrow: 1, color: "#0047AB" }}>
                 Haldiram Retail Private Limited
             </Text>
-            {/* <Button color="primary">Login</Button> */}
             <Button variant="contained">Login</Button>
           </Toolbar>
         </Taskbar>

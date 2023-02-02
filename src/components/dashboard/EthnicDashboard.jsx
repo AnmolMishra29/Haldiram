@@ -15,6 +15,8 @@ import {
 import Haldiramlogo from "../../assests/haldiramlogo.jpg";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import AlarmAlert from "./AlarmAlert";
 
 const Text = styled(Typography)`
   flex-grow: 1;
@@ -45,6 +47,7 @@ const Container = styled(Box)`
 
 const EthnicDashboard = () => {
   const [ethnicproducts, setEthnicProducts] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const getEthnicDetails = async () => {
     try {
@@ -59,6 +62,10 @@ const EthnicDashboard = () => {
     getEthnicDetails();
   }, []);
 
+  const openDialog = () => {
+    setOpen(true);
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -72,8 +79,11 @@ const EthnicDashboard = () => {
             >
               Ethnic Foods Private Limited
             </Text>
-            <Stylebutton variant="contained">Alarm</Stylebutton>
+            <Stylebutton variant="contained" onClick={() => openDialog()}>
+              Alarm
+            </Stylebutton>
             <Stylebutton variant="contained">Report</Stylebutton>
+            <AlarmAlert open={open} setOpen={setOpen} />
             <Box>
               <Image
                 src={Haldiramlogo}
@@ -104,7 +114,11 @@ const EthnicDashboard = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button variant="contained" size="small">Proceed</Button>
+                  <Link to="/malldetails">
+                    <Button variant="contained" size="small">
+                      Proceed
+                    </Button>
+                  </Link>
                 </CardActions>
               </Card>
             </Grid>
