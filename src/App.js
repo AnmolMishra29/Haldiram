@@ -6,14 +6,15 @@ import FourZeroFour from "./components/FourZeroFour";
 import MainDashboard from "./components/dashboard/MainDashboard";
 import MallDetails from "./components/StandartMode/MallDetails";
 import EngineeringMode from "./components/StandartMode/EngineeringMode";
-import UserRegistration from "./registration/UserRegistration";
-import StoreRegistration from "./registration/StoreRegistration";
-import DeviceRegistration from "./registration/DeviceRegistration";
+import UserRegistration from "./components/registration/UserRegistration";
+import DeviceRegistration from "./components/registration/DeviceRegistration";
+import CounterRegistration from "./components/registration/CounterRegistration";
+import StoreRegistration from "./components/registration/StoreRegistration";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Appbar />} />
 
@@ -43,8 +44,8 @@ function App() {
 
           <Route path="*" element={<FourZeroFour />} />
         </Routes>
-      </BrowserRouter>
-      {/* <DeviceRegistration/> */}
+      </BrowserRouter> */}
+      <DeviceRegistration/>
     </>
   );
 }
