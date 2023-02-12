@@ -1,66 +1,96 @@
-import { Box,TextField, Button,styled,Dialog, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Button,
+  styled,
+  Dialog,
+  Typography,
+} from "@mui/material";
+import InputLabel from "@mui/material/core/";
 
-const Component =styled(Box)`
-     height:65vh;
-     width:65vw;
-     margin:auto;
-`
+const Component = styled(Box)`
+  height: 65vh;
+  width: 80vw;
+  margin: auto;
+`;
+const Error = styled(Typography)``;
 const Container = styled(Box)`
-     padding: 25px 35px;
-     display: flex;
-     flex: 1;
-     overflow: auto;
-    flex-direction: column;
-    margin:auto;
-`
+  padding: 25px 35px;
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  flex-direction: column;
+  margin: auto;
+`;
 
-const Text = styled(TextField)`
-    width:30vw;
-    margin:25px;
-`
+const Textt = styled(TextField)`
+  width: 30vw;
+  margin: 25px;
+`;
 
-const Stylebutton = styled(Button)`
-    height:35px;
-    width: 60px; 
-    margin: 25px;
-    display:flex;
-    justify-content:center;
-`
+const Stylebutto = styled(Button)`
+  height: 35px;
+  width: 60px;
+  margin: 25px;
+  display: flex;
+  justify-content: center;
+`;
 const HeadingText = styled(Typography)`
-    font-size:35px;
-    font-weight:700;
-    margin:25px;
-    color: "#1338BE";
-`
+  font-size: 35px;
+  font-weight: 700;
+  margin: 25px;
+  color: "#1338BE";
+`;
 
-const UserLogin = ({open, setOpen,flag})=> {
+const UserLogin = (props) => {
+  const [showPassword, setShowPassword] = useState(false);
 
-    
-    const handleClose =()=> {
-        setOpen(false);
-    }
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    return(
-            <Dialog open={open} onClose={handleClose} flag={flag}>
-               <Component>
-                    <Container>
-                       {    
-                         flag === 1 ? <HeadingText>Ethnic Foods Private Limited</HeadingText> : flag === 2 ? <HeadingText>Marketing Private Limited</HeadingText> : flag === 3 ? <HeadingText>Manufacturing Private Limited</HeadingText> : <HeadingText>Product Private Limited</HeadingText>
-                       }
-                         <Text variant="filled" name='email' label="Email"/>
-                         <Text variant="filled" name='password' label="Password"/>
-                         {
-                            flag === 1 ? <Link to="/ethnic"> <Stylebutton variant="contained">Login</Stylebutton> </Link> : 
-                            flag === 2 ? <Link to="/manufacturing"> <Stylebutton variant="contained">Login</Stylebutton> </Link> :
-                            flag === 3 ? <Link to="/marketing"> <Stylebutton variant="contained">Login</Stylebutton> </Link> :
-                            flag === 4 ? <Link to="/product"> <Stylebutton variant="contained">Login</Stylebutton> </Link> : null
-                         }
-                    </Container>
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
-               </Component> 
-            </Dialog>
-    )
-}
+  const { open, setOpen, flag, departmentName } = props;
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onClose={handleClose} flag={flag}>
+      <Component>
+        <Container>
+          {<HeadingText>{departmentName}</HeadingText>}
+
+          <Textt variant="filled" name="email" label="Email" />
+          <Textt variant="filled" name="password" label="Password" />
+          <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+          {}
+          <Stylebutto variant="contained">Login</Stylebutto>
+        </Container>
+      </Component>
+    </Dialog>
+  );
+};
 
 export default UserLogin;

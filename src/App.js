@@ -1,28 +1,51 @@
-import './App.css';
-import Appbar from './components/frontpage/Appbar';
-import EthnicDashboard from './components/dashboard/EthnicDashboard';
-import ManufacturingDashboard from './components/dashboard/ManufacturingDashboard';
-import MarketingDashboard from './components/dashboard/MarketingDashboard';
-import ProductDashboard from './components/dashboard/ProductDashboard';
-import MallDetails from './components/detailMall/MallDetails';
-import EngineeringMode from './components/detailMall/EngineeringMode';
-
-import { BrowserRouter,Routes, Route } from 'react-router-dom';
+import "./App.css";
+import Appbar from "./components/frontpage/Appbar";
+import EthnicDashboard from "./components/dashboard/EthnicDashboard";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FourZeroFour from "./components/FourZeroFour";
+import MainDashboard from "./components/dashboard/MainDashboard";
+import MallDetails from "./components/StandartMode/MallDetails";
+import EngineeringMode from "./components/StandartMode/EngineeringMode";
+import UserRegistration from "./registration/UserRegistration";
+import StoreRegistration from "./registration/StoreRegistration";
+import DeviceRegistration from "./registration/DeviceRegistration";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
+      <BrowserRouter>
         <Routes>
-           <Route path='/' element= {<Appbar/>}/>
-           <Route path='ethnic' element= {<EthnicDashboard/>}/>
-           <Route path='marketing' element= {<MarketingDashboard/>}/>
-           <Route path='manufacturing' element= {<ManufacturingDashboard/>}/>
-           <Route path='product' element= {<ProductDashboard/>}/>
-           <Route path='malldetails' element= {<MallDetails/>}/>
-           <Route path='engineering' element= {<EngineeringMode/>}/>
+          <Route exact path="/" element={<Appbar />} />
+
+          <Route
+            exact
+            path="/Ethnic Foods Private Limited/:index"
+            element={<EthnicDashboard />}
+          />
+          <Route
+            exact
+            path="/Marketing Private Limited/:index"
+            element={<EthnicDashboard />}
+          />
+          <Route
+            exact
+            path="/Manufacturing Private Limited/:index"
+            element={<EthnicDashboard />}
+          />
+          <Route
+            exact
+            path="/Products Private Limited/:index"
+            element={<EthnicDashboard />}
+          />
+          <Route exact path="/MainDashboard" element={<MainDashboard />} />
+          <Route exact path="/mallDetails" element={<MallDetails />} />
+          <Route exact path="/engineeringmode" element={<EngineeringMode />} />
+
+          <Route path="*" element={<FourZeroFour />} />
         </Routes>
-       
-    </BrowserRouter>
+      </BrowserRouter>
+      {/* <DeviceRegistration/> */}
+    </>
   );
 }
 
