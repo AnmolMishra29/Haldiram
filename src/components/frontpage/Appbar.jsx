@@ -113,6 +113,8 @@ const Appbar = () => {
             <Button variant="contained" onClick={()=> openDialog()}>Login </Button>
           </Toolbar>
         </Taskbar>
+
+        
       <Dialog open={open} onClose={handleClose} >
         <Component>
           <Container>
