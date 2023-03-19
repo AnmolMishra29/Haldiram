@@ -26,12 +26,11 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Stylebutton = styled(Button)`
-  display: flex;
+  display: block;
   width:20ch;
-  -webkit-box-align:center;
   align-items:center;
-  justify-content: center;
-  padding:8px;
+  justify-items: center;
+  //padding:8px;
 `;
 
 const Text = styled(Typography)`
@@ -94,7 +93,7 @@ const Cards = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
+};
 
   const openDialog = (el, index) => {
     setOpen(true);
@@ -108,10 +107,10 @@ const Cards = () => {
 
   const { mall } = useContext(HalidramContext);
 
-  return (
-    <Box style={{ backgroundImage: { Background } }}>
-      <Grid container spacing={4} style={{ marginTop: "7vh" }}>
-        {mall &&
+return (
+     <Box style={{ backgroundImage: { Background } }}>
+       <Grid container spacing={4} style={{ marginTop: "7vh" }}>
+         {mall &&
           mall.map((el, index) => {
             let path = `/${datadailog}`;
 
@@ -138,8 +137,8 @@ const Cards = () => {
                       width: "100%",
                       objectFit: "contain",
                       height: "120px",
-                      width: "170px",
-                      // justifyContent: "space-evenly",
+                      // width: "170px",
+                    
                     }}
                   />
                   <CardContent>
@@ -158,14 +157,16 @@ const Cards = () => {
                 </CardComponent>
                 
 
-                <Dialog open={open} onClose={handleClose} key={el.alarm}>
-                  <Component>
-                    <Container>
-                      <HeadingText>{dialogName}</HeadingText>
-                      {/* <Textt variant="filled" name="email" label="you@gmail.com" />
-                      <Textt variant="filled" name="password" label="Password" /> */}
 
-                      <FormControl
+
+                <Dialog open={open} onClose={handleClose} key={el.alarm}>
+                   <Component>
+                     <Container>
+                       <HeadingText>{dialogName}</HeadingText>
+                       {/* <Textt variant="filled" name="email" label="you@gmail.com" />
+                       <Textt variant="filled" name="password" label="Password" /> */}
+
+                       <FormControl
                         sx={{
                           m: "10px 0px",
                           width: "52ch",
@@ -210,9 +211,9 @@ const Cards = () => {
                         variant="filled"
                       >
                         <InputLabel htmlFor="outlined-adornment-password">
-                          Password
-                        </InputLabel>
-                        <OutlinedInput
+                           Password
+                         </InputLabel>
+                         <OutlinedInput
                           id="outlined-adornment-password"
                           type={showPassword ? "text" : "password"}
                           endAdornment={
