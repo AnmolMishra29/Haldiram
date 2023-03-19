@@ -1,0 +1,64 @@
+.regionContainer {
+    width: 80%;
+    height: 38vh;
+    background-color: rgb(168, 206, 237);
+    border: 1px solid black;
+    margin-top: 5vh;
+    margin-left: 10vh;
+    border-radius: 10px;
+    outline: none;
+}
+
+.titleSectionMainDashboard {
+    position: relative;
+    text-align: center;
+    padding-top: 1vh;
+}
+
+.goToRegion {
+    position: absolute;
+    top: 15%;
+    right: 2%;
+
+}
+
+.regionMall {
+    position: relative;
+    height: 100px;
+    width: 80px;
+    margin: 1vh 2vh;
+}
+
+.mallcircle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    color: red;
+    font-weight: bolder;
+}
+
+.mallname {
+    width: 80px;
+    height: 40px;
+    align-items: center;
+    border: 1px solid black;
+    background-color: lightgreen;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0%
+}
+
+
+.Allmallregion {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
