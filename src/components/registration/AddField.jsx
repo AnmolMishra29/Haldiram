@@ -1,4 +1,4 @@
-import { Stack, TextField, Box, Divider, Container } from "@mui/material";
+import { Stack, TextField, Box, Divider, Container, Grid } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 //import RemoveIcon from "@mui/icons-material/Remove";
 //import AddIcon from "@mui/icons-material/Add";
@@ -48,11 +48,8 @@ const AddField = ({
   });
 
   return (
-    <Container maxWidth="md">
-      {/* <Stack spacing={1} alignItems="center" justifyContent="center" direction="coloum"> */}
-        <Stack spacing={8} 
-        //style={{ alignItems: "center" }} 
-        direction="row">
+    <Box m="20px">
+      <Stack spacing={8} style={{ alignItems: "center" }} direction="row">
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
@@ -67,73 +64,80 @@ const AddField = ({
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit}>
-              <Box
-                display="grid"
-                gap="30px"
-                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                sx={{
-                  "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-                }}
-              >
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  type="text"
-                  label="Good Point High"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.goodHigh}
-                  name="goodHigh"
-                  error={!!touched.goodHigh && !!errors.goodHigh}
-                  helperText={touched.goodHigh && errors.goodHigh}
-                  sx={{ gridColumn:"span 4" }}
-                />
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  type="text"
-                  label="Good Point Low"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.goodLow}
-                  name="goodLow"
-                  error={!!touched.goodLow && !!errors.goodLow}
-                  helperText={touched.goodLow && errors.goodLow}
-                  sx={{ gridColumn:"span 4" }}
-                />
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  type="text"
-                  label="Best High"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.bestHigh}
-                  name="bestHigh"
-                  error={!!touched.bestHigh && !!errors.bestHigh}
-                  helperText={touched.bestHigh && errors.bestHigh}
-                  sx={{ gridColumn:"span 4" }}
-                />
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  type="text"
-                  label="Best Low"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.bestLow}
-                  name="bestLow"
-                  error={!!touched.bestLow && !!errors.bestLow}
-                  helperText={touched.bestLow && errors.bestLow}
-                  sx={{ gridColumn: "span 4" }}
-                />
-                <Divider />
+              <Box style={{ margin: "55px 20px 20px 20px" }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ margin: "20px, 5px" }}
+                >
+                  <Grid item md={3} sm={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Good Point High"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.goodHigh}
+                      name="goodHigh"
+                      error={!!touched.goodHigh && !!errors.goodHigh}
+                      helperText={touched.goodHigh && errors.goodHigh}
+                    />
+                  </Grid>
+
+                  <Grid item md={3} sm={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Good Point Low"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.goodLow}
+                      name="goodLow"
+                      error={!!touched.goodLow && !!errors.goodLow}
+                      helperText={touched.goodLow && errors.goodLow}
+                    />
+                  </Grid>
+
+                  <Grid item md={3} sm={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Best High"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.bestHigh}
+                      name="bestHigh"
+                      error={!!touched.bestHigh && !!errors.bestHigh}
+                      helperText={touched.bestHigh && errors.bestHigh}
+                    />
+                  </Grid>
+
+                  <Grid item md={3} sm={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Best Low"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.bestLow}
+                      name="bestLow"
+                      error={!!touched.bestLow && !!errors.bestLow}
+                      helperText={touched.bestLow && errors.bestLow}
+                    />
+                    <Divider />
+                  </Grid>
+                </Grid>
               </Box>
             </form>
           )}
         </Formik>
       </Stack>
-    </Container>
+    </Box>
   );
 };
 

@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   TextField,
-  Stack,
+  Grid,
   MenuItem,
   Container,
 } from "@mui/material";
@@ -13,10 +13,10 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { useContext } from "react";
 
 import axios from "axios";
+import HalidramContext from "../../context/Haldiramcontext/HaldiramContext";
 
 const StoreRegistration = () => {
   const isNonMobile = useMediaQuery("(min-width:600px");
@@ -24,8 +24,12 @@ const StoreRegistration = () => {
     console.log(values);
   };
 
-  const [regionOptions, setRegionOptions] = useState([""]);
+  const [regionOptions, setRegionOptions] = useState([]);
   const [value, setValue] = useState(dayjs("2018-01-01T00:00:00.000Z"));
+
+  const context = useContext(HalidramContext);
+
+  const { addStore, getAllRegion } = context;
 
   // const regionOptions = [
   //   { value: "1", label: "Region 1" },
@@ -35,49 +39,59 @@ const StoreRegistration = () => {
   // ];
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    region: "",
+    latitude: "",
+    longitude: "",
+    storeId: 0,
+    regionId: 0,
     on_time: "",
     off_time: "",
-    counterno: "",
+    counterno: 0,
+    storeName: "",
   };
+  const [storeData, setStoreData] = useState(initialValues);
 
+  // const handleChange = (e) => {
+  //   setStoreData({ ...storeData, [e.target.name]: e.target.value });
+  //   console.log(storeData);
+  // };
   const counterRegExp = /^[0-9]+$/;
 
   const userSchema = yup.object().shape({
-    firstName: yup.string().required("required"),
-    lastName: yup.string().required("required"),
-    email: yup.string().email("invalid email").required("required"),
+    longitude: yup.string().required("required"),
+    latitude: yup.string().required("required"),
+    storeId: yup.number().required("required"),
     on_time: yup.string().required("required"),
     off_time: yup.string().required("required"),
-    region: yup.string().required("required"),
+    regionId: yup.number().required("required"),
+    storeName: yup.string().required("required"),
     counterno: yup
       .string()
       .matches(counterRegExp, "Number of counters cannot be alphabets")
       .required("required"),
   });
 
-  useEffect(() => {
-    const getRegionData = async () => {
-      const res = await axios.get("http://192.168.29.5:8089/region/all");
-      setRegionOptions(res.data);
-      console.log(res.data);
-    };
-    getRegionData();
-  }, []);
+  //const handleClick = () => {
+  //console.log(storeData);
+  //addStore(storeData);
+  //};
+
+  // useEffect(() => {
+  //   const getRegionData = async () => {
+  //     const res = await axios.get(
+  //       "https://64098152d16b1f3ed6d46246.mockapi.io/store"
+  //     );
+  //     setRegionOptions(res.data);
+  //     console.log(res.data);
+  //   };
+  //   getRegionData();
+
+  //   // setRegionOptions(getAllRegion());
+  //   console.log(getAllRegion());
+  // }, []);
 
   return (
-    <Box
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 50,
-      }}
-    >
-      <Box
+    <Box m="20px">
+      {/* <Box
         style={{
           width: "40%",
           height: "100% - 20px",
@@ -85,186 +99,210 @@ const StoreRegistration = () => {
           boxShadow:
             "0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19)",
         }}
-      >
-        <Container maxWidth="md">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack direction="row" alignItems="center" justifyContent="center">
-              <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={userSchema}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleBlur,
-                  handleChange,
-                  handleSubmit,
-                }) => (
-                  <form onSubmit={handleSubmit}>
-                    <Box
-                      display="grid"
-                      gap="30px"
-                      gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                      sx={{
-                        "& > div": {
-                          gridColumn: isNonMobile ? undefined : "span 4",
-                        },
-                      }}
-                    >
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="First Name"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.firstName}
-                        name="firstName"
-                        error={!!touched.firstName && !!errors.firstName}
-                        helperText={touched.firstName && errors.firstName}
-                        sx={{ gridColumn: "span 2", marginTop: "15px" }}
-                        // sx={{ display: "flex", justifyContent:"center"}}
-                      />
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="Last Name"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.lastName}
-                        name="lastName"
-                        error={!!touched.lastName && !!errors.lastName}
-                        helperText={touched.lastName && errors.lastName}
-                        sx={{ gridColumn: "span 2", marginTop: "15px" }}
-                        // sx={{ display: "flex", justifyContent:"center"}}
-                      />
+      > */}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Formik
+          //onSubmit={handleFormSubmit}
+          initialValues={initialValues}
+          validationSchema={userSchema}
+          onSubmit={(data) => {
+            console.log(data);
+            let formData = new FormData();
+            formData.append("latitude", data.latitude);
+            formData.append("longitude", data.longitude);
+            formData.append("storeName", data.storeName);
+            formData.append("regionId", data.regionId);
+            formData.append("storeId", data.storeId);
+            formData.append("counterno", data.counterno);
+            formData.append("on_time", data.on_time);
+            formData.append("off_time", data.off_time);
 
-                      <TextField
-                        id="outlined-select-currency"
-                        select
-                        label="Region"
-                        defaultValue="1"
-                        helperText="Please select your Region Id"
-                        error={!!touched.region && !!errors.region}
-                        sx={{ gridColumn: "span 4" }}
-                      >
-                        {regionOptions.map((option) => (
-                          <MenuItem
-                            key={option.regionName}
-                            value={option.regionName}
-                          >
-                            {option.regionName}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+            axios({
+              method: "POST",
+              url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
+              data: data,
+            })
+              .then(function (res) {
+                console.log(res);
+                alert("Successfully signed up!");
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleClick,
+            handleChange,
+            handleSubmit,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box style={{ margin: "55px 20px 20px 20px" }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ margin: "20px, 5px" }}
+                >
+                  <Grid item md={6} sm={12} sx={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Latitude"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.latitude}
+                      //value={storeData.latitude}
+                      name="latitude"
+                      error={!!touched.latitude && !!errors.latitude}
+                      helperText={touched.latitude && errors.latitude}
+                    />
+                  </Grid>
 
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="Number of Counters"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.counterno}
-                        name="counterno"
-                        error={!!touched.counterno && !!errors.counterno}
-                        helperText={touched.counterno && errors.counterno}
-                        sx={{ gridColumn: "span 4" }}
-                        // sx={{ display: "flex", justifyContent:"center"}}
-                      />
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Longitude"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.longitude}
+                      name="longitude"
+                      error={!!touched.longitude && !!errors.longitude}
+                      helperText={touched.longitude && errors.longitude}
+                    />
+                  </Grid>
 
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="Email"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.email}
-                        name="email"
-                        error={!!touched.email && !!errors.email}
-                        helperText={touched.email && errors.email}
-                        sx={{ gridColumn: "span 4" }}
-                      />
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Store Name"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.storeName}
+                      name="storeName"
+                      error={!!touched.storeName && !!errors.storeName}
+                      helperText={touched.storeName && errors.storeName}
+                      sx={{ gridColumn: "span 4" }}
+                    />
+                  </Grid>
 
-                      <DesktopTimePicker
-                        label="On Time"
-                        value={values.on_time}
-                        error={!!touched.on_time && !!errors.on_time}
-                        helperText="Please Input store Opening Time"
-                        onBlur={handleBlur}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                        sx={{ gridColumn: "span 4" }}
-                      />
-                      
-                      {/* <MobileTimePicker
-                        label="For mobile"
-                        value={values.on_time}
-                        error={!!touched.on_time && !!errors.on_time}
-                        helperText="Please Input store Opening Time"
-                        onBlur={handleBlur}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                        sx={{ gridColumn: "span 4" }}
-                      /> */}
+                  {/* <TextField
+                    id="outlined-select-currency"
+                    select
+                    label="Region"
+                    //defaultValue="1"
+                    error={!!touched.regionId && !!errors.regionId}
+                    helperText="Please select your Region Id"
+                    value={values.regionId}
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    {regionOptions.map((option) => (
+                      <MenuItem key={option.regionName} value={option.regionId}>
+                        {option.regionName}
+                      </MenuItem>
+                    ))}
+                  </TextField> */}
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Region Id"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.regionId}
+                      name="regionId"
+                      error={!!touched.regionId && !!errors.regionId}
+                      helperText={touched.regionId && errors.regionId}
+                    />
+                  </Grid>
 
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="time"
-                        //label="On-Time"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.on_time}
-                        name="on_time"
-                        error={!!touched.on_time && !!errors.on_time}
-                        helperText="Please Input store Opening Time"
-                        sx={{ gridColumn: "span 4" }}
-                      />
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Store Id"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.storeId}
+                      name="storeId"
+                      error={!!touched.storeId && !!errors.storeId}
+                      helperText={touched.storeId && errors.storeId}
+                    />
+                  </Grid>
 
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="time"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.off_time}
-                        name="off_time"
-                        error={!!touched.off_time && !!errors.off_time}
-                        helperText="Please Input store Closing Time"
-                        sx={{ gridColumn: "span 4" }}
-                      />
-                    </Box>
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Number of Counters"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.counterno}
+                      name="counterno"
+                      error={!!touched.counterno && !!errors.counterno}
+                      helperText={touched.counterno && errors.counterno}
+                    />
+                  </Grid>
 
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      m="20px 3px 30px 3px"
-                    >
-                      <Button
-                        type="submit"
-                        color="secondary"
-                        variant="contained"
-                        sx={{ width: "90%", borderRadius: "20px" }}
-                      >
-                        Create New Store
-                      </Button>
-                    </Box>
-                  </form>
-                )}
-              </Formik>
-            </Stack>
-          </LocalizationProvider>
-        </Container>
-      </Box>
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="time"
+                      //label="On-Time"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.on_time}
+                      name="on_time"
+                      error={!!touched.on_time && !!errors.on_time}
+                      helperText="Please Input store Opening Time"
+                    />
+                  </Grid>
+
+                  <Grid item md={6} sm={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="time"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.off_time}
+                      name="off_time"
+                      error={!!touched.off_time && !!errors.off_time}
+                      helperText="Please Input store Closing Time"
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+
+              <Box display="flex" justifyContent="end" mt="20px" mr="22px">
+                <Button
+                  type="submit"
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleClick}
+                  sx={{ width: "30%", borderRadius: "16px" }}
+                >
+                  Create New Store
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
+      </LocalizationProvider>
+      {/* </Box> */}
     </Box>
   );
 };

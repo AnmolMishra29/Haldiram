@@ -11,7 +11,7 @@ import {
   IconButton,
   Switch,
   Divider,
-  Container,
+  Grid,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
@@ -164,15 +164,15 @@ const CounterRegistration = ({
       boxSizing: "border-box",
     },
   }));
-  
+
   useEffect(() => {
     const getDeviceData = async () => {
       const res = await axios.get("http://192.168.29.5:8089/device/");
-      setDeviceOptions(res.data)
+      setDeviceOptions(res.data);
     };
     const getStoreData = async () => {
       const res1 = await axios.get("http://192.168.29.5:8089/store/getAll");
-      setStoreOptions(res1.data)
+      setStoreOptions(res1.data);
       // let storeArr = res1.data.map((obj) => {
       //   return obj.storeId;
       // });
@@ -182,174 +182,162 @@ const CounterRegistration = ({
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1, width: "100vw", height: "100vh" }}>
+    <Box
+      m="20px"
+      //sx={{ flexGrow: 1, width: "100vw", height: "100vh" }}
+    >
       {/* TextFields */}
 
-      <Box
+      {/* <Box
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           marginTop: 50,
         }}
+      > */}
+
+      <Formik
+        onSubmit={handleFormSubmit}
+        initialValues={initialValues}
+        validationSchema={userSchema}
       >
-        <Box
-          style={{
-            width: "50%",
-            height: "100% - 20px",
-            marginTop: 15,
-            boxShadow:
-              "0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19)",
-          }}
-        >
-          <Container maxWidth="md">
-            <Stack direction="row" alignItems="center" justifyContent="center">
-              <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={userSchema}
+        {({
+          values,
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Box style={{ margin: "55px 20px 20px 20px" }}>
+              <Grid
+                container
+                alignItems="center"
+                spacing={2}
+                sx={{ margin: "20px, 5px" }}
               >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleBlur,
-                  handleChange,
-                  handleSubmit,
-                }) => (
-                  <form onSubmit={handleSubmit}>
-                    <Box
-                      display="grid"
-                      gap="30px"
-                      gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                      sx={{
-                        "& > div": {
-                          gridColumn: isNonMobile ? undefined : "span 4",
-                        },
-                      }}
-                    >
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        type="text"
-                        label="Counter Name"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.countName}
-                        name="countName"
-                        error={!!touched.countName && !!errors.countName}
-                        helperText={touched.countName && errors.countName}
-                        sx={{ gridColumn: "span 4", marginTop: "15px" }}
-                      />
+                <Grid item md={12} sm={12} xs={12}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    type="text"
+                    label="Counter Name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.countName}
+                    name="countName"
+                    error={!!touched.countName && !!errors.countName}
+                    helperText={touched.countName && errors.countName}
+                    sx={{ gridColumn: "span 4", marginTop: "15px" }}
+                  />
+                </Grid>
 
-                      <TextField
-                        //id="outlined-select-currency"
-                        select
-                        label="Device Type"
-                        options={deviceOptions}
-                        defaultValue="Device 1"
-                        helperText="Please select your device"
-                        error={!!touched.deviceType && !!errors.deviceType}
-                        sx={{ gridColumn: "span 4" }}
-                      >
-                        {deviceOptions.map((option) => (
-                          <MenuItem
-                            key={option.deviceId}
-                            value={option.deviceId}
-                          >
-                            {option.deviceId}
-                          </MenuItem>
-                        ))} 
-                      </TextField>
+                <Grid item md={12} sm={12} xs={12}>
+                  <TextField
+                    //id="outlined-select-currency"
+                    fullWidth
+                    select
+                    label="Device Type"
+                    options={deviceOptions}
+                    defaultValue="Device 1"
+                    helperText="Please select your device"
+                    error={!!touched.deviceType && !!errors.deviceType}
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    {deviceOptions.map((option) => (
+                      <MenuItem key={option.deviceId} value={option.deviceId}>
+                        {option.deviceId}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
 
-                      <TextField
-                        //id="outlined-select-currency"
-                        select
-                        label="Store Type"
-                        defaultValue="1"
-                        helperText="Please select store"
-                        error={!!touched.storeType && !!errors.storeType}
-                        sx={{ gridColumn: "span 4" }}
-                      >
-                        {storeOptions.map((option) => (
-                          <MenuItem key={option.storeId} value={option.storeId}>
-                            {option.storeId}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                <Grid item md={12} sm={12} xs={12}>
+                  <TextField
+                    //id="outlined-select-currency"
+                    fullWidth
+                    select
+                    label="Store Type"
+                    defaultValue="1"
+                    helperText="Please select store"
+                    error={!!touched.storeType && !!errors.storeType}
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    {storeOptions.map((option) => (
+                      <MenuItem key={option.storeId} value={option.storeId}>
+                        {option.storeId}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+              </Grid>
 
-                      {inputFields.map((item, index) => (
-                        <Box key={index}>
-                          <AddField
-                            inputFields={inputFields}
-                            index={index}
-                            item={item}
-                            handleChange={handleChange}
-                            handleRemove={handleRemove}
-                            handleAdd={handleAdd}
-                          />
-                          <Divider style={{ marginBottom: 10 }} />
-                        </Box>
-                      ))}
-                    </Box>
+              {inputFields.map((item, index) => (
+                <Box key={index}>
+                  <AddField
+                    inputFields={inputFields}
+                    index={index}
+                    item={item}
+                    handleChange={handleChange}
+                    handleRemove={handleRemove}
+                    handleAdd={handleAdd}
+                  />
+                  <Divider style={{ marginBottom: 10 }} />
+                </Box>
+              ))}
+            </Box>
 
-                    {/* Toggle Button */}
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      alignItems="center"
-                      justifyContent="end"
-                    >
-                      <Typography>Off</Typography>
-                      <AntSwitch
-                        defaultChecked
-                        inputProps={{ "aria-label": "ant design" }}
-                      />
-                      <Typography>On</Typography>
-                    </Stack>
-
-                    <Box display="flex" justifyContent="center" mt="20px">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleRemove}
-                        disabled={count === 1 ? true : false}
-                        sx={{ marginRight: 5, borderRadius: "20px" }}
-                      >
-                        Remove Set Points
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleAdd}
-                        disabled={count === 3 ? true : false}
-                        sx={{ borderRadius: "20px" }}
-                      >
-                        Add Set Points
-                      </Button>
-                    </Box>
-
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      m="20px 3px 30px 3px"
-                    >
-                      <Button
-                        type="submit"
-                        color="secondary"
-                        variant="contained"
-                        sx={{ width: "90%", borderRadius: "20px" }}
-                      >
-                        Create New Counter
-                      </Button>
-                    </Box>
-                  </form>
-                )}
-              </Formik>
+            {/* Toggle Button */}
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              justifyContent="end"
+            >
+              <Typography>Off</Typography>
+              <AntSwitch
+                defaultChecked
+                inputProps={{ "aria-label": "ant design" }}
+              />
+              <Typography>On</Typography>
             </Stack>
-          </Container>
-        </Box>
-      </Box>
+
+            <Box display="flex" justifyContent="center" mt="20px">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleRemove}
+                disabled={count === 1 ? true : false}
+                sx={{ marginRight: 5, borderRadius: "20px" }}
+              >
+                Remove Set Points
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleAdd}
+                disabled={count === 3 ? true : false}
+                sx={{ borderRadius: "20px" }}
+              >
+                Add Set Points
+              </Button>
+            </Box>
+
+            <Box display="flex" justifyContent="center" m="20px 3px 30px 3px">
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                sx={{ width: "90%", borderRadius: "16px" }}
+              >
+                Create New Counter
+              </Button>
+            </Box>
+          </form>
+        )}
+      </Formik>
     </Box>
   );
 };
