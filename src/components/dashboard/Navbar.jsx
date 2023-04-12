@@ -74,7 +74,7 @@ const Navbar = () => {
             {/* <Button color="primary">Login</Button> */}
             <Button
               variant="contained"
-              onClick={() => navigate("/registration")}
+              onClick={() => navigate("/registration/userregistration")}
             >
               Go to DashBoard{" "}
             </Button>
