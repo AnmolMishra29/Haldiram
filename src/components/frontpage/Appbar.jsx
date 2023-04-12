@@ -140,6 +140,7 @@ const Appbar = () => {
                   alignSelf: "center",
                 }}
                 variant="filled"
+                required
               >
                 <InputLabel htmlFor="outlined-adornment-email">
                   you@gmail.com
