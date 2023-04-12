@@ -18,7 +18,7 @@ import Newlist from "./components/registration/Newlist";
 function App() {
   return (
     <>
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Appbar />} />
 
@@ -68,9 +68,9 @@ function App() {
           />
           <Route exact path="/registration/allusers" element={<Newlist />} />
         </Routes>
-      </BrowserRouter> 
-      */}
-      <BrowserRouter>
+      </BrowserRouter>
+
+      {/* <BrowserRouter>
         <ProSidebaar />
         <Routes>
           <Route
@@ -87,7 +87,7 @@ function App() {
             exact
             path="/deviceregistration"
             element={<DeviceRegistration />}
-          />
+          /> 
           <Route
             exact
             path="/counterregistration"
@@ -95,7 +95,7 @@ function App() {
           />
           <Route exact path="/allusers" element={<Newlist />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </>
   );
 }
