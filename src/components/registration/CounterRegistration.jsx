@@ -6,8 +6,9 @@ import {
   MenuItem,
   styled,
   Typography,
-  AppBar,
-  Toolbar,
+  FormControl,
+  Select,
+  InputLabel,
   IconButton,
   Switch,
   Divider,
@@ -16,27 +17,10 @@ import {
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Haldiramlogo from "../../assests/haldiramlogo.jpg";
 import AddField from "./AddField";
 import axios from "axios";
-
-const Text = styled(Typography)`
-  flex-grow: 1;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-`;
-const Taskbar = styled(AppBar)`
-  background-color: "#ffffff";
-  height: 75px;
-`;
-const Image = styled("img")({
-  height: 66,
-  width: 95,
-  margin: "auto",
-  paddingRight: 70,
-});
+import Header from "./Header";
 
 const CounterRegistration = ({
   index,
@@ -45,7 +29,6 @@ const CounterRegistration = ({
   //handleRemove,
   //handleAdd,
 }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px");
   const handleFormSubmit = (values) => {
     console.log(values);
   };
@@ -77,10 +60,6 @@ const CounterRegistration = ({
   // values[index][event.target.name] = event.target.value;
 
   //   setInputFields(values);
-  // };
-
-  // const handleName = (event) => {
-  //   setName(event.target.value);
   // };
 
   // adds new input
@@ -182,25 +161,32 @@ const CounterRegistration = ({
   }, []);
 
   return (
-    <Box
-      m="20px"
-      //sx={{ flexGrow: 1, width: "100vw", height: "100vh" }}
-    >
-      {/* TextFields */}
-
-      {/* <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 50,
-        }}
-      > */}
-
+    <Box m="73px 20px 20px 235px">
+      <Header title="COUNTER REGISTRATION" />
       <Formik
-        onSubmit={handleFormSubmit}
         initialValues={initialValues}
         validationSchema={userSchema}
+        onSubmit={(data, { resetForm }) => {
+          console.log(data);
+          let formData = new FormData();
+          formData.append("counterName", data.counterName);
+          formData.append("storeType", data.storeType);
+          formData.append("deviceType", data.deviceType);
+
+          axios({
+            method: "POST",
+            url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
+            data: data,
+          })
+            .then(function (res) {
+              console.log(res);
+              alert("Successfully signed up!");
+            })
+            .catch(function (res) {
+              console.log(res);
+            });
+          resetForm({ data: "" });
+        }}
       >
         {({
           values,
@@ -218,7 +204,7 @@ const CounterRegistration = ({
                 spacing={2}
                 sx={{ margin: "20px, 5px" }}
               >
-                <Grid item md={12} sm={12} xs={12}>
+                <Grid item md={12} xs={12}>
                   <TextField
                     fullWidth
                     variant="outlined"
@@ -230,12 +216,12 @@ const CounterRegistration = ({
                     name="countName"
                     error={!!touched.countName && !!errors.countName}
                     helperText={touched.countName && errors.countName}
-                    sx={{ gridColumn: "span 4", marginTop: "15px" }}
+                    //sx={{ gridColumn: "span 4", marginTop: "15px" }}
                   />
                 </Grid>
 
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField
+                <Grid item md={12} xs={12}>
+                  {/* <TextField
                     //id="outlined-select-currency"
                     fullWidth
                     select
@@ -251,26 +237,50 @@ const CounterRegistration = ({
                         {option.deviceId}
                       </MenuItem>
                     ))}
-                  </TextField>
+                  </TextField> */}
+                  <FormControl fullWidth>
+                    <InputLabel>Device Type</InputLabel>
+                    <Select
+                      name="deviceType"
+                      fullWidth
+                      required
+                      label="Device Type"
+                      value={values.deviceType}
+                      onChange={handleChange}
+                      helperText="Please select your device"
+                      error={!!touched.deviceType && !!errors.deviceType}
+                      helpertext={touched.deviceType && errors.deviceType}
+                    >
+                      {deviceOptions.map((option) => (
+                        <MenuItem key={option.deviceId} value={option.deviceId}>
+                          {option.deviceId}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
 
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField
-                    //id="outlined-select-currency"
-                    fullWidth
-                    select
-                    label="Store Type"
-                    defaultValue="1"
-                    helperText="Please select store"
-                    error={!!touched.storeType && !!errors.storeType}
-                    sx={{ gridColumn: "span 4" }}
-                  >
-                    {storeOptions.map((option) => (
-                      <MenuItem key={option.storeId} value={option.storeId}>
-                        {option.storeId}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                <Grid item md={12} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel>Store Type</InputLabel>
+                    <Select
+                      name="storeType"
+                      fullWidth
+                      required
+                      label="Store Type"
+                      value={values.storeType}
+                      onChange={handleChange}
+                      helperText="Please select your store"
+                      error={!!touched.storeType && !!errors.storeType}
+                      helpertext={touched.storeType && errors.storeType}
+                    >
+                      {storeOptions.map((option) => (
+                        <MenuItem key={option.storeId} value={option.storeId}>
+                          {option.storeId}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
 

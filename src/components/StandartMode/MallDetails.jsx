@@ -13,12 +13,11 @@ import {
 } from "@mui/material";
 import { useContext, useState, useEffect } from "react";
 import { DeviceThermostat, SettingsPowerRounded } from '@mui/icons-material';
-// import { Link } from "react-router-dom";
 import Haldiramlogo from "../../assests/haldiramlogo.jpg";
 import HalidramContext from "../../context/Haldiramcontext/HaldiramContext";
 import axios from 'axios'
 import '../../App.css'
-import {Link} from "react-router-dom";
+import {Link,useParams} from "react-router-dom";
 import AlarmAlert from "../dashboard/AlarmAlert";
 
 const Text = styled(Typography)`
@@ -53,27 +52,41 @@ const Stylebutton = styled(Button)`
 const MallDetails = () => {
 
   const { mall } = useContext(HalidramContext);
-  const [Temp, setTemp] = useState([])
+  const [temp, setTemp] = useState([]);
+  const [compareTempe, setCompareTempe] = useState([]);
   const [open, setOpen] = useState(false);
 
   let mallitems = [];
   mallitems = mall[0].stores[0].Items;
 
 
-  const getTemp = async () => {
-    const response = await axios.get('http://192.168.29.5:1880/api')
-    setTemp(response.data);
+  const compareTemp = async () => {
+    try{
+      const response = await axios.get(`http://192.168.29.5:8089/telemetry/counter?counterId={id}`);
+      setCompareTempe(response.data);
+    }
+    catch(error){
+      console.log();
+    }
+  }
+
+  const getTemp = async ()=> {
+    try{
+      const response1 = await axios.get(`http://192.168.29.5:8089/counter-set-Point/get?counterSetPointId={id}`);
+      setTemp(response1.data);
+    }
+    catch(error){
+      console.log(error);
+    }
   }
 
   useEffect(() => {
-
-    getTemp();
-    
+    compareTemp();
+    getTemp(); 
   }, [])
   
   setTimeout(() => {
-    getTemp();
-    
+    compareTemp();  
   }, 55000);
 
   const openDialog =()=> {
@@ -152,7 +165,7 @@ const MallDetails = () => {
 
 
         <Grid container spacing={2}>
-          {Temp && Temp.map((el, index) => {
+          {temp && temp.map((el, index) => {
 
             // setTimeout(() => {
             return (

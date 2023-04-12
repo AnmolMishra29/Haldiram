@@ -196,10 +196,6 @@ const MainLogin = () => {
                   >
                     Login
                   </LoginButton>
-                  {/* <Text style={{ textAlign: "center" }}>OR</Text>
-                <SignupButton style={{ marginBottom: 50 }}>
-                  Create an account
-                </SignupButton> */}
                 </Wrapper>
               </Box>
             </form>

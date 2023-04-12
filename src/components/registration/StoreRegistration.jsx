@@ -4,6 +4,9 @@ import {
   TextField,
   Grid,
   MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
   Container,
 } from "@mui/material";
 import { Formik } from "formik";
@@ -14,9 +17,9 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useContext } from "react";
-
 import axios from "axios";
 import HalidramContext from "../../context/Haldiramcontext/HaldiramContext";
+import Header from "./Header";
 
 const StoreRegistration = () => {
   const isNonMobile = useMediaQuery("(min-width:600px");
@@ -31,24 +34,17 @@ const StoreRegistration = () => {
 
   const { addStore, getAllRegion } = context;
 
-  // const regionOptions = [
-  //   { value: "1", label: "Region 1" },
-  //   { value: "2", label: "Region 2" },
-  //   { value: "3", label: "Region 3" },
-  //   { value: "4", label: "Region 4" },
-  // ];
-
   const initialValues = {
     latitude: "",
     longitude: "",
     storeId: 0,
-    regionId: 0,
-    on_time: "",
-    off_time: "",
-    counterno: 0,
+    regionId: "",
+    storeOffTime: "",
+    storeOnTime: "",
+    noOfCounter: 0,
     storeName: "",
   };
-  const [storeData, setStoreData] = useState(initialValues);
+  //const [storeData, setStoreData] = useState(initialValues);
 
   // const handleChange = (e) => {
   //   setStoreData({ ...storeData, [e.target.name]: e.target.value });
@@ -60,13 +56,13 @@ const StoreRegistration = () => {
     longitude: yup.string().required("required"),
     latitude: yup.string().required("required"),
     storeId: yup.number().required("required"),
-    on_time: yup.string().required("required"),
-    off_time: yup.string().required("required"),
-    regionId: yup.number().required("required"),
+    storeOnTime: yup.string().required("required"),
+    storeOffTime: yup.string().required("required"),
+    regionId: yup.string().required("required"),
     storeName: yup.string().required("required"),
-    counterno: yup
-      .string()
-      .matches(counterRegExp, "Number of counters cannot be alphabets")
+    noOfCounter: yup
+      .number()
+      //.matches(counterRegExp, "Number of counters cannot be alphabets")
       .required("required"),
   });
 
@@ -75,22 +71,21 @@ const StoreRegistration = () => {
   //addStore(storeData);
   //};
 
-  // useEffect(() => {
-  //   const getRegionData = async () => {
-  //     const res = await axios.get(
-  //       "https://64098152d16b1f3ed6d46246.mockapi.io/store"
-  //     );
-  //     setRegionOptions(res.data);
-  //     console.log(res.data);
-  //   };
-  //   getRegionData();
+  useEffect(() => {
+    const getRegionData = async () => {
+      const res = await axios.get("http://192.168.29.5:8089/region/all");
+      setRegionOptions(res.data);
+      console.log(res.data);
+    };
+    getRegionData();
 
-  //   // setRegionOptions(getAllRegion());
-  //   console.log(getAllRegion());
-  // }, []);
+    // setRegionOptions(getAllRegion());
+    console.log(getAllRegion());
+  }, []);
 
   return (
-    <Box m="20px">
+    <Box m="73px 20px 20px 235px">
+      <Header title="STORE REGISTRATION" />
       {/* <Box
         style={{
           width: "40%",
@@ -105,7 +100,7 @@ const StoreRegistration = () => {
           //onSubmit={handleFormSubmit}
           initialValues={initialValues}
           validationSchema={userSchema}
-          onSubmit={(data) => {
+          onSubmit={(data, { resetForm }) => {
             console.log(data);
             let formData = new FormData();
             formData.append("latitude", data.latitude);
@@ -113,13 +108,13 @@ const StoreRegistration = () => {
             formData.append("storeName", data.storeName);
             formData.append("regionId", data.regionId);
             formData.append("storeId", data.storeId);
-            formData.append("counterno", data.counterno);
-            formData.append("on_time", data.on_time);
-            formData.append("off_time", data.off_time);
+            formData.append("noOfCounter", data.noOfCounter);
+            formData.append("storeOnTime", data.storeOnTime);
+            formData.append("storeOffTime", data.storeOffTime);
 
             axios({
               method: "POST",
-              url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
+              url: "http://192.168.29.5:8089/store/add",
               data: data,
             })
               .then(function (res) {
@@ -129,6 +124,7 @@ const StoreRegistration = () => {
               .catch(function (res) {
                 console.log(res);
               });
+            resetForm({ data: "" });
           }}
         >
           {({
@@ -157,7 +153,6 @@ const StoreRegistration = () => {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.latitude}
-                      //value={storeData.latitude}
                       name="latitude"
                       error={!!touched.latitude && !!errors.latitude}
                       helperText={touched.latitude && errors.latitude}
@@ -212,18 +207,29 @@ const StoreRegistration = () => {
                     ))}
                   </TextField> */}
                   <Grid item md={6} sm={12} xs={12}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      type="text"
-                      label="Region Id"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.regionId}
-                      name="regionId"
-                      error={!!touched.regionId && !!errors.regionId}
-                      helperText={touched.regionId && errors.regionId}
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel>Region Id</InputLabel>
+                      <Select
+                        name="regionId"
+                        fullWidth
+                        required
+                        label="Region ID"
+                        value={values.regionId}
+                        onChange={handleChange}
+                        helperText="Please select your Region"
+                        error={!!touched.regionId && !!errors.regionId}
+                        helpertext={touched.regionId && errors.regionId}
+                      >
+                        {regionOptions.map((option) => (
+                          <MenuItem
+                            key={option.regionId}
+                            value={option.regionId}
+                          >
+                            {option.regionId}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Grid>
 
                   <Grid item md={6} sm={12} xs={12}>
@@ -249,10 +255,10 @@ const StoreRegistration = () => {
                       label="Number of Counters"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.counterno}
-                      name="counterno"
-                      error={!!touched.counterno && !!errors.counterno}
-                      helperText={touched.counterno && errors.counterno}
+                      value={values.noOfCounter}
+                      name="noOfCounter"
+                      error={!!touched.noOfCounter && !!errors.noOfCounter}
+                      helperText={touched.noOfCounter && errors.noOfCounter}
                     />
                   </Grid>
 
@@ -264,9 +270,9 @@ const StoreRegistration = () => {
                       //label="On-Time"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.on_time}
-                      name="on_time"
-                      error={!!touched.on_time && !!errors.on_time}
+                      value={values.storeOnTime}
+                      name="storeOnTime"
+                      error={!!touched.storeOnTime && !!errors.storeOnTime}
                       helperText="Please Input store Opening Time"
                     />
                   </Grid>
@@ -278,9 +284,9 @@ const StoreRegistration = () => {
                       type="time"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.off_time}
-                      name="off_time"
-                      error={!!touched.off_time && !!errors.off_time}
+                      value={values.storeOffTime}
+                      name="storeOffTime"
+                      error={!!touched.storeOffTime && !!errors.storeOffTime}
                       helperText="Please Input store Closing Time"
                     />
                   </Grid>
