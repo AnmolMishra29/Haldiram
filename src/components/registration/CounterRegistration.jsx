@@ -21,6 +21,7 @@ import Haldiramlogo from "../../assests/haldiramlogo.jpg";
 import AddField from "./AddField";
 import axios from "axios";
 import Header from "./Header";
+import ProSidebaar from "./ProSidebaar";
 
 const CounterRegistration = ({
   index,
@@ -161,67 +162,69 @@ const CounterRegistration = ({
   }, []);
 
   return (
-    <Box m="73px 20px 20px 235px">
-      <Header title="COUNTER REGISTRATION" />
-      <Formik
-        initialValues={initialValues}
-        validationSchema={userSchema}
-        onSubmit={(data, { resetForm }) => {
-          console.log(data);
-          let formData = new FormData();
-          formData.append("counterName", data.counterName);
-          formData.append("storeType", data.storeType);
-          formData.append("deviceType", data.deviceType);
+    <>
+      <ProSidebaar />
+      <Box m="73px 20px 20px 235px">
+        <Header title="COUNTER REGISTRATION" />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={userSchema}
+          onSubmit={(data, { resetForm }) => {
+            console.log(data);
+            let formData = new FormData();
+            formData.append("counterName", data.counterName);
+            formData.append("storeType", data.storeType);
+            formData.append("deviceType", data.deviceType);
 
-          axios({
-            method: "POST",
-            url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
-            data: data,
-          })
-            .then(function (res) {
-              console.log(res);
-              alert("Successfully signed up!");
+            axios({
+              method: "POST",
+              url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
+              data: data,
             })
-            .catch(function (res) {
-              console.log(res);
-            });
-          resetForm({ data: "" });
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <Box style={{ margin: "55px 20px 20px 20px" }}>
-              <Grid
-                container
-                alignItems="center"
-                spacing={2}
-                sx={{ margin: "20px, 5px" }}
-              >
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    type="text"
-                    label="Counter Name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.countName}
-                    name="countName"
-                    error={!!touched.countName && !!errors.countName}
-                    helperText={touched.countName && errors.countName}
-                    //sx={{ gridColumn: "span 4", marginTop: "15px" }}
-                  />
-                </Grid>
+              .then(function (res) {
+                console.log(res);
+                alert("Successfully signed up!");
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+            resetForm({ data: "" });
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box style={{ margin: "55px 20px 20px 20px" }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ margin: "20px, 5px" }}
+                >
+                  <Grid item md={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Counter Name"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.countName}
+                      name="countName"
+                      error={!!touched.countName && !!errors.countName}
+                      helperText={touched.countName && errors.countName}
+                      //sx={{ gridColumn: "span 4", marginTop: "15px" }}
+                    />
+                  </Grid>
 
-                <Grid item md={12} xs={12}>
-                  {/* <TextField
+                  <Grid item md={12} xs={12}>
+                    {/* <TextField
                     //id="outlined-select-currency"
                     fullWidth
                     select
@@ -238,117 +241,121 @@ const CounterRegistration = ({
                       </MenuItem>
                     ))}
                   </TextField> */}
-                  <FormControl fullWidth>
-                    <InputLabel>Device Type</InputLabel>
-                    <Select
-                      name="deviceType"
-                      fullWidth
-                      required
-                      label="Device Type"
-                      value={values.deviceType}
-                      onChange={handleChange}
-                      helperText="Please select your device"
-                      error={!!touched.deviceType && !!errors.deviceType}
-                      helpertext={touched.deviceType && errors.deviceType}
-                    >
-                      {deviceOptions.map((option) => (
-                        <MenuItem key={option.deviceId} value={option.deviceId}>
-                          {option.deviceId}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel>Device Type</InputLabel>
+                      <Select
+                        name="deviceType"
+                        fullWidth
+                        required
+                        label="Device Type"
+                        value={values.deviceType}
+                        onChange={handleChange}
+                        helperText="Please select your device"
+                        error={!!touched.deviceType && !!errors.deviceType}
+                        helpertext={touched.deviceType && errors.deviceType}
+                      >
+                        {deviceOptions.map((option) => (
+                          <MenuItem
+                            key={option.deviceId}
+                            value={option.deviceId}
+                          >
+                            {option.deviceId}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item md={12} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel>Store Type</InputLabel>
+                      <Select
+                        name="storeType"
+                        fullWidth
+                        required
+                        label="Store Type"
+                        value={values.storeType}
+                        onChange={handleChange}
+                        helperText="Please select your store"
+                        error={!!touched.storeType && !!errors.storeType}
+                        helpertext={touched.storeType && errors.storeType}
+                      >
+                        {storeOptions.map((option) => (
+                          <MenuItem key={option.storeId} value={option.storeId}>
+                            {option.storeId}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
 
-                <Grid item md={12} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Store Type</InputLabel>
-                    <Select
-                      name="storeType"
-                      fullWidth
-                      required
-                      label="Store Type"
-                      value={values.storeType}
-                      onChange={handleChange}
-                      helperText="Please select your store"
-                      error={!!touched.storeType && !!errors.storeType}
-                      helpertext={touched.storeType && errors.storeType}
-                    >
-                      {storeOptions.map((option) => (
-                        <MenuItem key={option.storeId} value={option.storeId}>
-                          {option.storeId}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
+                {inputFields.map((item, index) => (
+                  <Box key={index}>
+                    <AddField
+                      inputFields={inputFields}
+                      index={index}
+                      item={item}
+                      handleChange={handleChange}
+                      handleRemove={handleRemove}
+                      handleAdd={handleAdd}
+                    />
+                    <Divider style={{ marginBottom: 10 }} />
+                  </Box>
+                ))}
+              </Box>
 
-              {inputFields.map((item, index) => (
-                <Box key={index}>
-                  <AddField
-                    inputFields={inputFields}
-                    index={index}
-                    item={item}
-                    handleChange={handleChange}
-                    handleRemove={handleRemove}
-                    handleAdd={handleAdd}
-                  />
-                  <Divider style={{ marginBottom: 10 }} />
-                </Box>
-              ))}
-            </Box>
-
-            {/* Toggle Button */}
-            <Stack
-              direction="row"
-              spacing={2}
-              alignItems="center"
-              justifyContent="end"
-            >
-              <Typography>Off</Typography>
-              <AntSwitch
-                defaultChecked
-                inputProps={{ "aria-label": "ant design" }}
-              />
-              <Typography>On</Typography>
-            </Stack>
-
-            <Box display="flex" justifyContent="center" mt="20px">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleRemove}
-                disabled={count === 1 ? true : false}
-                sx={{ marginRight: 5, borderRadius: "20px" }}
+              {/* Toggle Button */}
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="end"
               >
-                Remove Set Points
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleAdd}
-                disabled={count === 3 ? true : false}
-                sx={{ borderRadius: "20px" }}
-              >
-                Add Set Points
-              </Button>
-            </Box>
+                <Typography>Off</Typography>
+                <AntSwitch
+                  defaultChecked
+                  inputProps={{ "aria-label": "ant design" }}
+                />
+                <Typography>On</Typography>
+              </Stack>
 
-            <Box display="flex" justifyContent="center" m="20px 3px 30px 3px">
-              <Button
-                type="submit"
-                color="secondary"
-                variant="contained"
-                sx={{ width: "90%", borderRadius: "16px" }}
-              >
-                Create New Counter
-              </Button>
-            </Box>
-          </form>
-        )}
-      </Formik>
-    </Box>
+              <Box display="flex" justifyContent="center" mt="20px">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleRemove}
+                  disabled={count === 1 ? true : false}
+                  sx={{ marginRight: 5, borderRadius: "20px" }}
+                >
+                  Remove Set Points
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleAdd}
+                  disabled={count === 3 ? true : false}
+                  sx={{ borderRadius: "20px" }}
+                >
+                  Add Set Points
+                </Button>
+              </Box>
+
+              <Box display="flex" justifyContent="center" m="20px 3px 30px 3px">
+                <Button
+                  type="submit"
+                  color="secondary"
+                  variant="contained"
+                  sx={{ width: "90%", borderRadius: "16px" }}
+                >
+                  Create New Counter
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
+      </Box>
+    </>
   );
 };
 

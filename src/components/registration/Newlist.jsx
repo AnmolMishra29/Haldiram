@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import MOCK_DATA from "../../assests/MOCK_DATA.json";
 import Header from "./Header";
+import ProSidebaar from "./ProSidebaar";
 
 const ListWrapper = styled(List)`
   position: absolute;
@@ -127,119 +128,126 @@ const Newlist = () => {
   }, []);
 
   return (
-    <Box m="73px 20px 20px 246px">
-      <Header title="ALL USERS" />
+    <>
+      <ProSidebaar />
+      <Box m="73px 20px 20px 246px">
+        <Header title="ALL USERS" />
 
-      {/* Button */}
-      <Box display="flex" justifyContent="end" mt="20px" mr="22px">
-        <Link to="/userregistration" style={{ textDecoration: "none" }}>
-          <Button type="submit" color="secondary" variant="contained">
-            add user
-          </Button>
-        </Link>
-      </Box>
+        {/* Button */}
+        <Box display="flex" justifyContent="end" mt="20px" mr="22px">
+          <Link to="/userregistration" style={{ textDecoration: "none" }}>
+            <Button type="submit" color="secondary" variant="contained">
+              add user
+            </Button>
+          </Link>
+        </Box>
 
-      {/* Table */}
-      <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
-        <Table sx={{ minWidth: 300 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Id</StyledTableCell>
-              <StyledTableCell align="center">First Name </StyledTableCell>
-              <StyledTableCell align="center">Last Name </StyledTableCell>
-              <StyledTableCell align="center">Designation</StyledTableCell>
-              <StyledTableCell align="center">Email&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">Gender&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">Contact&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">&nbsp;</StyledTableCell>
-              <StyledTableCell align="center">
-                {/* SearchBar */}
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ "aria-label": "search" }}
-                    onChange={(e) => getText(e.target.value)}
-                    value={text}
-                  />
-                  {text && (
-                    <ListWrapper>
-                      {searchbyName
-                        ? user
-                            .filter((row) =>
-                              row.firstName
-                                .toLowerCase()
-                                .includes(text.toLowerCase())
-                            )
-                            .map((row) => (
-                              <ListItem>
-                                {/* <Link
+        {/* Table */}
+        <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
+          <Table sx={{ minWidth: 300 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Id</StyledTableCell>
+                <StyledTableCell align="center">First Name </StyledTableCell>
+                <StyledTableCell align="center">Last Name </StyledTableCell>
+                <StyledTableCell align="center">Designation</StyledTableCell>
+                <StyledTableCell align="center">Email&nbsp;</StyledTableCell>
+                <StyledTableCell align="center">Gender&nbsp;</StyledTableCell>
+                <StyledTableCell align="center">Contact&nbsp;</StyledTableCell>
+                <StyledTableCell align="center">&nbsp;</StyledTableCell>
+                <StyledTableCell align="center">
+                  {/* SearchBar */}
+                  <Search>
+                    <SearchIconWrapper>
+                      <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      placeholder="Search…"
+                      inputProps={{ "aria-label": "search" }}
+                      onChange={(e) => getText(e.target.value)}
+                      value={text}
+                    />
+                    {text && (
+                      <ListWrapper>
+                        {searchbyName
+                          ? user
+                              .filter((row) =>
+                                row.firstName
+                                  .toLowerCase()
+                                  .includes(text.toLowerCase())
+                              )
+                              .map((row) => (
+                                <ListItem>
+                                  {/* <Link
                           to={`/product/${product.id}`}
                           onClick={() => setText("")}
                           style={{ textDecoration: "none", color: "inherit" }}
                         > */}
-                                {row.name}
-                                {/* </Link> */}
-                              </ListItem>
-                            ))
-                        : user
-                            .filter((row) =>
-                              row.email
-                                .toLowerCase()
-                                .includes(text.toLowerCase())
-                            )
-                            .map((row) => <ListItem>{row.email}</ListItem>)}
-                    </ListWrapper>
-                  )}
-                  &nbsp;
-                </Search>
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {user.map((row) => (
-              <StyledTableRow key={row.id}>
-                <StyledTableCell component="th" scope="row">
-                  {row.id}
+                                  {row.name}
+                                  {/* </Link> */}
+                                </ListItem>
+                              ))
+                          : user
+                              .filter((row) =>
+                                row.email
+                                  .toLowerCase()
+                                  .includes(text.toLowerCase())
+                              )
+                              .map((row) => <ListItem>{row.email}</ListItem>)}
+                      </ListWrapper>
+                    )}
+                    &nbsp;
+                  </Search>
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.firstName}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.lastName}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.designation}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.email}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.userGender}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.contact}</StyledTableCell>
-                <StyledTableCell>
-                  <Button
-                    style={{ backgroundColor: "#1338BE", color: "#FFFFFF" }}
-                  >
-                    Edit
-                  </Button>
-                </StyledTableCell>
-
-                <Box display="row" justifyContent="end">
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {user.map((row) => (
+                <StyledTableRow key={row.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.id}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.firstName}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.lastName}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.designation}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.email}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.userGender}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.contact}
+                  </StyledTableCell>
                   <StyledTableCell>
                     <Button
-                      style={{ backgroundColor: "#FF2400", color: "#FFFFFF" }}
-                      onClick={(id) => deleteuser}
+                      style={{ backgroundColor: "#1338BE", color: "#FFFFFF" }}
                     >
-                      Delete
+                      Edit
                     </Button>
                   </StyledTableCell>
-                </Box>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+
+                  <Box display="row" justifyContent="end">
+                    <StyledTableCell>
+                      <Button
+                        style={{ backgroundColor: "#FF2400", color: "#FFFFFF" }}
+                        onClick={(id) => deleteuser}
+                      >
+                        Delete
+                      </Button>
+                    </StyledTableCell>
+                  </Box>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </>
   );
 };
 

@@ -17,7 +17,7 @@ const ProSidebaar = () => {
     <SideNav
       onSelect={(selected) => {
         console.log(selected);
-        navigate("/" + selected);
+        navigate("/registration/" + selected);
       }}
       expanded="true"
       disable="true"

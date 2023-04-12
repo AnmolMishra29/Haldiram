@@ -18,6 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import axios from "axios";
 import Header from "./Header";
+import ProSidebaar from "./ProSidebaar";
 
 const UserRegistration = () => {
   //const [showPassword, setShowPassword] = useState(false);
@@ -100,6 +101,7 @@ const UserRegistration = () => {
 
   return (
     <>
+      <ProSidebaar />
       <Box m="73px 20px 20px 235px">
         <Header title="USER REGISTRATION" />
         <Formik
