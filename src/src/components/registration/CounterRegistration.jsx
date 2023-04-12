@@ -6,8 +6,9 @@ import {
   MenuItem,
   styled,
   Typography,
-  AppBar,
-  Toolbar,
+  FormControl,
+  Select,
+  InputLabel,
   IconButton,
   Switch,
   Divider,
@@ -16,27 +17,11 @@ import {
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Haldiramlogo from "../../assests/haldiramlogo.jpg";
 import AddField from "./AddField";
 import axios from "axios";
-
-const Text = styled(Typography)`
-  flex-grow: 1;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-`;
-const Taskbar = styled(AppBar)`
-  background-color: "#ffffff";
-  height: 75px;
-`;
-const Image = styled("img")({
-  height: 66,
-  width: 95,
-  margin: "auto",
-  paddingRight: 70,
-});
+import Header from "./Header";
+import ProSidebaar from "./ProSidebaar";
 
 const CounterRegistration = ({
   index,
@@ -45,7 +30,6 @@ const CounterRegistration = ({
   //handleRemove,
   //handleAdd,
 }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px");
   const handleFormSubmit = (values) => {
     console.log(values);
   };
@@ -77,10 +61,6 @@ const CounterRegistration = ({
   // values[index][event.target.name] = event.target.value;
 
   //   setInputFields(values);
-  // };
-
-  // const handleName = (event) => {
-  //   setName(event.target.value);
   // };
 
   // adds new input
@@ -182,60 +162,69 @@ const CounterRegistration = ({
   }, []);
 
   return (
-    <Box
-      m="20px"
-      //sx={{ flexGrow: 1, width: "100vw", height: "100vh" }}
-    >
-      {/* TextFields */}
+    <>
+      <ProSidebaar />
+      <Box m="73px 20px 20px 235px">
+        <Header title="COUNTER REGISTRATION" />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={userSchema}
+          onSubmit={(data, { resetForm }) => {
+            console.log(data);
+            let formData = new FormData();
+            formData.append("counterName", data.counterName);
+            formData.append("storeType", data.storeType);
+            formData.append("deviceType", data.deviceType);
 
-      {/* <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 50,
-        }}
-      > */}
+            axios({
+              method: "POST",
+              url: "https://64098152d16b1f3ed6d46246.mockapi.io/store",
+              data: data,
+            })
+              .then(function (res) {
+                console.log(res);
+                alert("Successfully signed up!");
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+            resetForm({ data: "" });
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box style={{ margin: "55px 20px 20px 20px" }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ margin: "20px, 5px" }}
+                >
+                  <Grid item md={12} xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      type="text"
+                      label="Counter Name"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.countName}
+                      name="countName"
+                      error={!!touched.countName && !!errors.countName}
+                      helperText={touched.countName && errors.countName}
+                      //sx={{ gridColumn: "span 4", marginTop: "15px" }}
+                    />
+                  </Grid>
 
-      <Formik
-        onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        validationSchema={userSchema}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <Box style={{ margin: "55px 20px 20px 20px" }}>
-              <Grid
-                container
-                alignItems="center"
-                spacing={2}
-                sx={{ margin: "20px, 5px" }}
-              >
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    type="text"
-                    label="Counter Name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.countName}
-                    name="countName"
-                    error={!!touched.countName && !!errors.countName}
-                    helperText={touched.countName && errors.countName}
-                    sx={{ gridColumn: "span 4", marginTop: "15px" }}
-                  />
-                </Grid>
-
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField
+                  <Grid item md={12} xs={12}>
+                    {/* <TextField
                     //id="outlined-select-currency"
                     fullWidth
                     select
@@ -251,94 +240,122 @@ const CounterRegistration = ({
                         {option.deviceId}
                       </MenuItem>
                     ))}
-                  </TextField>
+                  </TextField> */}
+                    <FormControl fullWidth>
+                      <InputLabel>Device Type</InputLabel>
+                      <Select
+                        name="deviceType"
+                        fullWidth
+                        required
+                        label="Device Type"
+                        value={values.deviceType}
+                        onChange={handleChange}
+                        helperText="Please select your device"
+                        error={!!touched.deviceType && !!errors.deviceType}
+                        helpertext={touched.deviceType && errors.deviceType}
+                      >
+                        {deviceOptions.map((option) => (
+                          <MenuItem
+                            key={option.deviceId}
+                            value={option.deviceId}
+                          >
+                            {option.deviceId}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item md={12} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel>Store Type</InputLabel>
+                      <Select
+                        name="storeType"
+                        fullWidth
+                        required
+                        label="Store Type"
+                        value={values.storeType}
+                        onChange={handleChange}
+                        helperText="Please select your store"
+                        error={!!touched.storeType && !!errors.storeType}
+                        helpertext={touched.storeType && errors.storeType}
+                      >
+                        {storeOptions.map((option) => (
+                          <MenuItem key={option.storeId} value={option.storeId}>
+                            {option.storeId}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
 
-                <Grid item md={12} sm={12} xs={12}>
-                  <TextField
-                    //id="outlined-select-currency"
-                    fullWidth
-                    select
-                    label="Store Type"
-                    defaultValue="1"
-                    helperText="Please select store"
-                    error={!!touched.storeType && !!errors.storeType}
-                    sx={{ gridColumn: "span 4" }}
-                  >
-                    {storeOptions.map((option) => (
-                      <MenuItem key={option.storeId} value={option.storeId}>
-                        {option.storeId}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
+                {inputFields.map((item, index) => (
+                  <Box key={index}>
+                    <AddField
+                      inputFields={inputFields}
+                      index={index}
+                      item={item}
+                      handleChange={handleChange}
+                      handleRemove={handleRemove}
+                      handleAdd={handleAdd}
+                    />
+                    <Divider style={{ marginBottom: 10 }} />
+                  </Box>
+                ))}
+              </Box>
 
-              {inputFields.map((item, index) => (
-                <Box key={index}>
-                  <AddField
-                    inputFields={inputFields}
-                    index={index}
-                    item={item}
-                    handleChange={handleChange}
-                    handleRemove={handleRemove}
-                    handleAdd={handleAdd}
-                  />
-                  <Divider style={{ marginBottom: 10 }} />
-                </Box>
-              ))}
-            </Box>
-
-            {/* Toggle Button */}
-            <Stack
-              direction="row"
-              spacing={2}
-              alignItems="center"
-              justifyContent="end"
-            >
-              <Typography>Off</Typography>
-              <AntSwitch
-                defaultChecked
-                inputProps={{ "aria-label": "ant design" }}
-              />
-              <Typography>On</Typography>
-            </Stack>
-
-            <Box display="flex" justifyContent="center" mt="20px">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleRemove}
-                disabled={count === 1 ? true : false}
-                sx={{ marginRight: 5, borderRadius: "20px" }}
+              {/* Toggle Button */}
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="end"
               >
-                Remove Set Points
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleAdd}
-                disabled={count === 3 ? true : false}
-                sx={{ borderRadius: "20px" }}
-              >
-                Add Set Points
-              </Button>
-            </Box>
+                <Typography>Off</Typography>
+                <AntSwitch
+                  defaultChecked
+                  inputProps={{ "aria-label": "ant design" }}
+                />
+                <Typography>On</Typography>
+              </Stack>
 
-            <Box display="flex" justifyContent="center" m="20px 3px 30px 3px">
-              <Button
-                type="submit"
-                color="secondary"
-                variant="contained"
-                sx={{ width: "90%", borderRadius: "16px" }}
-              >
-                Create New Counter
-              </Button>
-            </Box>
-          </form>
-        )}
-      </Formik>
-    </Box>
+              <Box display="flex" justifyContent="center" mt="20px">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleRemove}
+                  disabled={count === 1 ? true : false}
+                  sx={{ marginRight: 5, borderRadius: "20px" }}
+                >
+                  Remove Set Points
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleAdd}
+                  disabled={count === 3 ? true : false}
+                  sx={{ borderRadius: "20px" }}
+                >
+                  Add Set Points
+                </Button>
+              </Box>
+
+              <Box display="flex" justifyContent="center" m="20px 3px 30px 3px">
+                <Button
+                  type="submit"
+                  color="secondary"
+                  variant="contained"
+                  sx={{ width: "90%", borderRadius: "16px" }}
+                >
+                  Create New Counter
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
+      </Box>
+    </>
   );
 };
 

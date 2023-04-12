@@ -1,8 +1,6 @@
 import { Stack, TextField, Box, Divider, Container, Grid } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-//import RemoveIcon from "@mui/icons-material/Remove";
-//import AddIcon from "@mui/icons-material/Add";
-
+import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -15,7 +13,7 @@ const AddField = ({
   values,
   inputFields,
 }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px");
+  //const isNonMobile = useMediaQuery("(min-width:600px");
   const handleFormSubmit = (values) => {
     console.log(values);
   };
@@ -51,9 +49,31 @@ const AddField = ({
     <Box m="20px">
       <Stack spacing={8} style={{ alignItems: "center" }} direction="row">
         <Formik
-          onSubmit={handleFormSubmit}
+          //onSubmit={handleFormSubmit}
           initialValues={initialValues}
           validationSchema={userSchema}
+          onSubmit={(data, { resetForm }) => {
+            console.log(data);
+            let formData = new FormData();
+            formData.append("goodHigh", data.goodHigh);
+            formData.append("goodLow", data.goodLow);
+            formData.append("bestHigh", data.bestHigh);
+            formData.append("bestLow", data.bestLow);
+
+            axios({
+              method: "POST",
+              url: "",
+              data: data,
+            })
+              .then(function (res) {
+                console.log(res);
+                alert("Successfully uploaded!");
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+            resetForm({ data: "" });
+          }}
         >
           {({
             values,
